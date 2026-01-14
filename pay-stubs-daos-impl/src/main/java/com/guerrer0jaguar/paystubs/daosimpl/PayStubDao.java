@@ -9,12 +9,13 @@ public class PayStubDao implements Dao<PayStub> {
 
 	@Override
 	public PayStub save(PayStub entity) {
-		// TODO Auto-generated method stub
+		
+		
 		return null;
 	}
 
 	@Override
-	public Optional<PayStub> findById(long id) {
+	public Optional<PayStub> findById(String id) {
 		// TODO Auto-generated method stub
 		return Optional.empty();
 	}

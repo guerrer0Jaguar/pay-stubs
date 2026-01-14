@@ -4,5 +4,5 @@ import java.util.Optional;
 
 public interface Dao<T> {
 	T save(T entity);
-	Optional<T> findById(long id);
+	Optional<T> findById(String id);
 }

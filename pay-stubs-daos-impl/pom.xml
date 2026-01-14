@@ -1,32 +1,35 @@
 <project
-    xmlns="https://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-<modelVersion>4.0.0</modelVersion>
+	xmlns="https://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-<parent>
-    <groupId>com.guerrer0jaguar.paystubs</groupId>
-    <artifactId>pay-stubs-project</artifactId>
-    <version>1.0</version>
-</parent>
+	<parent>
+		<groupId>com.guerrer0jaguar.paystubs</groupId>
+		<artifactId>pay-stubs-project</artifactId>
+		<version>1.0</version>
+	</parent>
 
-<groupId>com.guerrer0jaguar.paystubs.daosimpl</groupId>
-<artifactId>pay-stubs-daos-impl</artifactId>
-<version>1.0</version>
-<packaging>jar</packaging>
-<name>pay-stubs-daos-impl</name>
+	<groupId>com.guerrer0jaguar.paystubs.daosimpl</groupId>
+	<artifactId>pay-stubs-daos-impl</artifactId>
+	<version>1.0</version>
+	<packaging>jar</packaging>
+	<name>pay-stubs-daos-impl</name>
 
-<dependencies>
-    <dependency>
-        <groupId>com.guerrer0jaguar.paystubs.entity</groupId>
-        <artifactId>pay-stubs-entities</artifactId>
-        <version>1.0</version>
-    </dependency>
-    <dependency>
-        <groupId>com.guerrero0jaguar.paystubs.dao</groupId>
-        <artifactId>pay-stubs-daos</artifactId>
-        <version>1.0</version>
-    </dependency>
-</dependencies>
-
+	<dependencies>
+		<dependency>
+			<groupId>com.guerrer0jaguar.paystubs.entity</groupId>
+			<artifactId>pay-stubs-entities</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.guerrero0jaguar.paystubs.dao</groupId>
+			<artifactId>pay-stubs-daos</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>dynamodb-enhanced</artifactId>
+		</dependency>
+	</dependencies>
 </project>
