@@ -22,6 +22,10 @@
 						<target>25</target>
 					</configuration>
 				</plugin>
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.5.4</version>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
@@ -45,7 +49,28 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.junit</groupId>
+				<artifactId>junit-bom</artifactId>
+				<version>6.0.2</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
+	<dependencies>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<repositories>
+		<repository>
+			<id>dynamodb-local</id>
+			<name>DynamoDB Local Release Repository</name>
+			<url>https://s3-us-west-1.amazonaws.com/dynamodb-local/release</url>
+		</repository>
+	</repositories>
 </project>
