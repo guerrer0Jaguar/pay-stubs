@@ -1,8 +1,11 @@
 package com.guerrer0jaguar.paystubs.entity;
 
 import java.util.Objects;
+
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbFlatten;
 
+@DynamoDbBean
 public class Employee {
 
     private String taxId;// RFC
