@@ -7,7 +7,6 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import com.guerrer0jaguar.paystubs.entity.Company;
 
-import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.core.internal.waiters.ResponseOrException;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
@@ -59,13 +58,13 @@ class TablesCreationTest {
 
     private void validateTableCreation(
             DynamoDbClient stdClient,
-            String string) {
+            String tableName) {
         
         try (DynamoDbWaiter waiter = DynamoDbWaiter.builder()
                 .client(stdClient).build()) { 
             ResponseOrException<DescribeTableResponse> response = waiter
                     .waitUntilTableExists(
-                            builder -> builder.tableName("Company").build())
+                            builder -> builder.tableName(tableName).build())
                     .matched();
             DescribeTableResponse tableDescription = response.response()
                     .orElseThrow(() -> new RuntimeException(
