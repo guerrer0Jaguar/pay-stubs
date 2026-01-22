@@ -2,16 +2,20 @@ package com.guerrer0jaguar.paystubs.entity;
 
 import java.util.Objects;
 
+import software.amazon.awssdk.enhanced.dynamodb.DefaultAttributeConverterProvider;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbFlatten;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey;
 
-@DynamoDbBean
+@DynamoDbBean(converterProviders = { DefaultAttributeConverterProvider.class })
 public class Company {
 
     private String taxId;// RFC
     private String name;
     private BaseEntity entity;
 
+    @DynamoDbSortKey
     public String getTaxId() {
         return taxId;
     }
@@ -21,6 +25,7 @@ public class Company {
         this.taxId = taxId;
     }
 
+    @DynamoDbAttribute("name")
     public String getName() {
         return name;
     }
