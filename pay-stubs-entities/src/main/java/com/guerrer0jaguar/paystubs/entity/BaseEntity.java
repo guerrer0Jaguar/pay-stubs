@@ -3,7 +3,6 @@ package com.guerrer0jaguar.paystubs.entity;
 import java.time.Instant;
 import java.util.Objects;
 
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
 
@@ -28,8 +27,7 @@ public class BaseEntity {
             String id) {
         this.id = id;
     }
-
-    @DynamoDbAttribute("creationDate")
+ 
     public Instant getCreationDate() {
         return creationDate;
     }

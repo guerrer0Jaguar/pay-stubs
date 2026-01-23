@@ -11,8 +11,7 @@
 	</parent>
 
 	<groupId>com.guerrer0jaguar.paystubs.entity</groupId>
-	<artifactId>pay-stubs-entities</artifactId>
-	<version>1.0</version>
+	<artifactId>pay-stubs-entities</artifactId>	
 	<packaging>jar</packaging>
 	<name>pay-stubs-entities</name>
 	<dependencies>
