@@ -4,10 +4,12 @@ import com.guerrer0jaguar.paystubs.entity.Company;
 import com.guerrer0jaguar.paystubs.entity.Employee;
 import com.guerrer0jaguar.paystubs.entity.PayStub;
 
+import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 
+@Slf4j
 public class TablesCreator {
 
     private static final Class<?>[] tablesClasses = { Company.class,
@@ -15,8 +17,7 @@ public class TablesCreator {
 
     private final DynamoDbEnhancedClient enhancedClient;
 
-    TablesCreator(DynamoDbEnhancedClient enhancedClient) {
-        super();
+    TablesCreator(DynamoDbEnhancedClient enhancedClient) {        
         this.enhancedClient = enhancedClient;
     }
 
@@ -33,7 +34,7 @@ public class TablesCreator {
         DynamoDbTable<T> table = dbClient
                 .table(classType.getSimpleName(),
                         TableSchema.fromBean(classType));
-        System.out.println("creating table..." + classType.getSimpleName());
+        log.info("creating table..." + classType.getSimpleName());
         table.createTable();
 
         return table;

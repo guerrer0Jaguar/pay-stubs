@@ -6,12 +6,14 @@ import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
+import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.dynamodb.services.local.main.ServerRunner;
 import software.amazon.dynamodb.services.local.server.DynamoDBProxyServer;
 
+@Slf4j
 public class LocalDbCreationExtension
         implements BeforeAllCallback, AfterAllCallback {
     
@@ -25,11 +27,11 @@ public class LocalDbCreationExtension
     public LocalDbCreationExtension() {
     }
 
+    @SuppressWarnings("exports")
     @Override
     public void beforeAll(
             ExtensionContext context) throws Exception {
-        System.out.println("Init DB server...");
-        
+            
         server = ServerRunner
                 .createServerFromCommandLineArgs(
                         new String[] { "-inMemory", "-port", SERVER_PORT });
@@ -40,10 +42,11 @@ public class LocalDbCreationExtension
         tablesCreationAux.createTables();
     }
 
+    @SuppressWarnings("exports")
     @Override
     public void afterAll(
             ExtensionContext context) throws Exception {
-        System.out.println("Closing DB server..");
+        log.info("Closing DB server..");
         try {
             this.server.stop();
         } catch (Exception e) {
@@ -52,18 +55,17 @@ public class LocalDbCreationExtension
     }
 
     private DynamoDbClient createStandardDBclient() {
-        System.out.println("creating db connection....");
-        DynamoDbClient stdClient = DynamoDbClient
+        
+        return DynamoDbClient
                 .builder()
                 .region(Region.US_EAST_1)
                 .endpointOverride(URI.create(SERVER))
-                .build();
-        return stdClient;
+                .build();        
     }
     
     DynamoDbEnhancedClient createEnhancedDBClient(
             DynamoDbClient stdClient) {
-        System.out.println("creating enhanced db connection....");
+        
         return DynamoDbEnhancedClient
                 .builder()
                 .dynamoDbClient(stdClient)
