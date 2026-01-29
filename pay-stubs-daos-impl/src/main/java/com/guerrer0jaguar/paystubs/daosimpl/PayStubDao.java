@@ -1,6 +1,7 @@
 package com.guerrer0jaguar.paystubs.daosimpl;
 
 import java.time.Instant;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -10,6 +11,7 @@ import com.guerrer0jaguar.paystubs.entity.PayStub;
 
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
+import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 
 public class PayStubDao implements Dao<PayStub> {
@@ -18,16 +20,12 @@ public class PayStubDao implements Dao<PayStub> {
     private final DynamoDbTable<PayStub> table;
     
     public PayStubDao() {
-        this.dynamoDBClient = null;
-        this.table = null;
-    }
-
-    public PayStubDao(DynamoDbEnhancedClient dynamoClient) {
-        dynamoDBClient = dynamoClient;
-        table = this.dynamoDBClient.table("pay_stubs",
+        this.dynamoDBClient = DbConnection.getInstance().getEnhDbEnhanceDBclient();
+        table = this.dynamoDBClient.table(PayStub.class.getSimpleName(),
                 TableSchema.fromBean(PayStub.class));
     }
 
+    @SuppressWarnings("exports")
     @Override
     public PayStub save(
             PayStub entity) {
@@ -38,10 +36,26 @@ public class PayStubDao implements Dao<PayStub> {
         return entity;
     }
 
+    @SuppressWarnings("exports")
     @Override
     public Optional<PayStub> findById(
             String id) {
-        // TODO Auto-generated method stub
-        return Optional.empty();
+        
+        Key key = Key
+                .builder()
+                .partitionValue(id)
+                .build();
+        
+        PayStub entity = table.getItem(k-> k.key(key));
+        
+        return Objects.isNull(entity) ?
+                Optional.empty() : 
+                Optional.of( entity);
+    }
+
+    @SuppressWarnings("exports")
+    @Override
+    public Class<PayStub> getType() {        
+        return PayStub.class;
     }
 }
