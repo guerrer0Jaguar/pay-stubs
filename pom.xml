@@ -10,6 +10,14 @@
 	<packaging>pom</packaging>
 	<name>pay-stubs-project</name>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<aws.java.sdk.version>2.41.10</aws.java.sdk.version>
+		<log4j.version>2.25.3</log4j.version>
+		<lombok.version>1.18.42</lombok.version>
+		<maven.compiler.proc>full</maven.compiler.proc>
+	</properties>
+
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -20,6 +28,13 @@
 					<configuration>
 						<source>25</source>
 						<target>25</target>
+						<annotationProcessorPaths>
+							<path>
+								<groupId>org.projectlombok</groupId>
+								<artifactId>lombok</artifactId>
+								<version>${lombok.version}</version>
+							</path>
+						</annotationProcessorPaths>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -29,12 +44,6 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<aws.java.sdk.version>2.41.10</aws.java.sdk.version>
-		<log4j.version>2.25.3</log4j.version>
-	</properties>
 
 	<modules>
 		<module>pay-stubs-entities</module>
@@ -87,11 +96,11 @@
 			<artifactId>log4j-slf4j2-impl</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.42</version>
+			<version>${lombok.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
