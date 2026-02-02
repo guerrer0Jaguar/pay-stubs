@@ -1,12 +1,15 @@
 package com.guerrer0jaguar.paystubs.daosimpl;
 
 import java.time.Instant;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.guerrer0jaguar.paystubs.entity.BaseEntity;
 
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
+import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 
 abstract class BaseDao<T extends BaseEntity> {
@@ -21,6 +24,29 @@ abstract class BaseDao<T extends BaseEntity> {
                 TableSchema.fromBean(type));
     }
     
+    public T save(
+            T entity) {
+        
+        generateIdentity(entity);       
+        table.putItem(entity);
+        
+        return entity;
+    }
+    
+    public Optional<T> findById(
+            String id) {
+        
+       Key key = Key
+                  .builder()
+                  .partitionValue(id)
+                  .build();
+       T entity = table.getItem(k -> k.key(key));
+       
+       return Objects.isNull(entity) ?
+               Optional.empty() :
+               Optional.of(entity);
+    }
+ 
     void generateIdentity(T entity){
      String id = UUID.randomUUID().toString();
      entity.setId(id);
