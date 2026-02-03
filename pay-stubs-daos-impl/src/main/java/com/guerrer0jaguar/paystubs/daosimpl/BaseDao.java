@@ -40,6 +40,7 @@ abstract class BaseDao<T extends BaseEntity> {
                   .builder()
                   .partitionValue(id)
                   .build();
+       
        T entity = table.getItem(k -> k.key(key));
        
        return Objects.isNull(entity) ?

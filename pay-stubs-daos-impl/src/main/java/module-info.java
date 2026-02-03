@@ -15,7 +15,8 @@ module com.guerrer0jaguar.paystubs.daosimpl {
             with com.guerrer0jaguar.paystubs.daosimpl.PayStubDao;
     provides com.guerrer0jaguar.paystubs.dao.DaoProviderFactory
             with com.guerrer0jaguar.paystubs.daosimpl.PayStubDaoProvider,
-            com.guerrer0jaguar.paystubs.daosimpl.EmployeeDaoProvider;
+            com.guerrer0jaguar.paystubs.daosimpl.EmployeeDaoProvider,
+            com.guerrer0jaguar.paystubs.daosimpl.CompanyDaoProvider;
 
     exports com.guerrer0jaguar.paystubs.daosimpl;
 }
