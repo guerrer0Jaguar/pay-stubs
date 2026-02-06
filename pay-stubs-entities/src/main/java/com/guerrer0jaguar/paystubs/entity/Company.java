@@ -7,10 +7,9 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 
 @DynamoDbBean
 @Data
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-public class Company  extends BaseEntity {
-    
-    private String taxId;// RFC
+@ToString
+@EqualsAndHashCode
+public class Company {    
+    private String companyTaxId;// RFC
     private String name;
 }

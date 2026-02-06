@@ -40,6 +40,7 @@ public class LocalDbCreationExtension
             ExtensionContext context) throws Exception {
         log.info("Closing DB server..");
         try {
+            tablesCreationAux.cleanDatabase(DbConnection.getInstance().getStandarDBclient());
             this.server.stop();
         } catch (Exception e) {
             throw new RuntimeException(e);

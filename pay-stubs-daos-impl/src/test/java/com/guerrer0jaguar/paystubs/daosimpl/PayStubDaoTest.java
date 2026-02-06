@@ -14,6 +14,7 @@ import com.guerrer0jaguar.paystubs.entity.Employee;
 import com.guerrer0jaguar.paystubs.entity.PayStub;
 
 import lombok.extern.slf4j.Slf4j;
+import software.amazon.awssdk.enhanced.dynamodb.Key;
 
 @Slf4j
 class PayStubDaoTest {
@@ -23,7 +24,7 @@ class PayStubDaoTest {
     @Test
     void testSave() {
 
-        Dao<PayStub> dao = createDAO();
+        Dao<PayStub,Key> dao = createDAO();
         PayStub payStub = createPayStubEntity("https://test.com/file1.pdf");
         payStub =  dao.save(payStub);
         assertNotNull(payStub.getId());
@@ -32,17 +33,23 @@ class PayStubDaoTest {
 
     @Test
     void testFindById() {
-        Dao<PayStub> dao = createDAO();
+        Dao<PayStub,Key> dao = createDAO();
         PayStub payStub = createPayStubEntity("https://test.com/file2.pdf");
         payStub = dao.save(payStub);        
-        Optional<PayStub> payStubFound = dao.findById(payStub.getId());        
+        
+        Key key = Key
+                   .builder()
+                   .partitionValue(payStub.getEmployee().getTaxId())
+                   .addSortValue(payStub.getId())
+                   .build();
+        
+        Optional<PayStub> payStubFound = dao.findById(key);        
         assertTrue(payStubFound.isPresent());                
     }
     
-    @SuppressWarnings("unchecked")
-    private Dao<PayStub> createDAO() {
-        DaoProviderFactory factory = new PayStubDaoProvider();
-        Dao<PayStub> dao = (Dao<PayStub>) factory.createDao();        
+    private Dao<PayStub, Key> createDAO() {
+        DaoProviderFactory<PayStub,Key> factory = new PayStubDaoProvider();
+        Dao<PayStub,Key> dao = factory.createDao();        
         assertNotNull(dao);
         
         return dao;
@@ -50,7 +57,8 @@ class PayStubDaoTest {
     
     private PayStub createPayStubEntity(String urlFile) {
         PayStub payStub = new PayStub();       
-        payStub.setEmployee(new Employee());
+        Employee employee = new Employee("AWS780921QAW");
+        payStub.setEmployee(employee);
         payStub.setUrlFile(urlFile);
         
         return payStub;

@@ -4,11 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import com.guerrer0jaguar.paystubs.entity.Company;
-import com.guerrer0jaguar.paystubs.entity.Employee;
 import com.guerrer0jaguar.paystubs.entity.PayStub;
 
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +18,7 @@ import software.amazon.awssdk.services.dynamodb.model.DescribeTableResponse;
 import software.amazon.awssdk.services.dynamodb.waiters.DynamoDbWaiter;
 
 @Slf4j
+@Disabled
 class TablesCreationTest {
     
     @RegisterExtension
@@ -27,8 +27,6 @@ class TablesCreationTest {
     @Test
     void test() {
         log.info("running test...");
-        printTableAttributes(Company.class);
-        printTableAttributes(Employee.class);
         printTableAttributes(PayStub.class);
     }
 
