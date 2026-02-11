@@ -85,13 +85,14 @@ class PayStubDaoTest {
         assertTrue(itemsFound.size() == 3);
         
         Instant yesterday = Instant.now().minus(1, ChronoUnit.DAYS);
+        Instant today = Instant.now().plus(1, ChronoUnit.DAYS);
         List<PayStub> otherItems = dao.findByTimeCreation(
                 yesterday, 
-                Instant.now(),
+                today,
                 payStub.getEmployee().getTaxId());
         assertFalse(otherItems.isEmpty());
         assertTrue(otherItems.size() == 1);
-        
+        log.info("Last element created at {}", otherItems.getFirst().getCreationDate());
     }
 
     private Instant fromShortDateToInstant(String date) {

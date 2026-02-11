@@ -45,7 +45,10 @@ public class TablesCreator {
         List<String> tablesBeforeEvenStarting = 
                 listTables(DbConnection.getInstance().getStandarDBclient());
         if ( !tablesBeforeEvenStarting.isEmpty()) {
-            cleanDatabase(null, tablesBeforeEvenStarting);
+            cleanDatabase(
+                    DbConnection.getInstance().getStandarDBclient(), 
+                    tablesBeforeEvenStarting,
+                    classType);                    
         }
         log.info("creating table..." + classType.getSimpleName());
         table.createTable();
@@ -106,21 +109,24 @@ public class TablesCreator {
         return allTables;
     }
 
-    void cleanDatabase(DynamoDbClient ddb) {
-        List<String> tableNames = listTables(ddb);
-        cleanDatabase(ddb, tableNames);
-    }
-    
-    private void cleanDatabase(
+    private <T> void cleanDatabase(
             DynamoDbClient ddb,
-            List<String> tableNames) {
-
+            List<String> tableNames,Class<T> classType) {
+        
         for (String curName : tableNames) {
             DeleteTableRequest dtR = DeleteTableRequest
                     .builder()
                     .tableName(curName)
                     .build();
             ddb.deleteTable(dtR);
+            
+            try (DynamoDbWaiter waiter = DynamoDbWaiter.builder().client(ddb).build()) { 
+                waiter
+                        .waitUntilTableNotExists(builder -> builder.tableName(classType.getSimpleName()).build())                        
+                        .matched();  
+
+                log.info("{} table was deleted.", classType.getSimpleName());
+            }
         }
     }
 }
