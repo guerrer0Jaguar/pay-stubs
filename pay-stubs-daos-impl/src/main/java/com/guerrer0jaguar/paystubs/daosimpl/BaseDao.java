@@ -46,6 +46,10 @@ abstract class BaseDao<T extends PayStub> {
     void generateIdentity(T entity){
      String id = UUID.randomUUID().toString();
      entity.setId(id);
-     entity.setCreationDate(Instant.now());                                               
+     
+     if (entity.getCreationDate() == null) {
+         entity.setCreationDate(Instant.now());
+     }
+                                                    
     }
 }
