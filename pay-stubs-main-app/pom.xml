@@ -10,25 +10,23 @@
     <version>1.0</version>
 </parent>
 
-<groupId>com.guerrer0jaguar.paystubs.mainapp</groupId>
 <artifactId>pay-stubs-main-app</artifactId>
-<version>1.0</version>
 <packaging>jar</packaging>
 <name>pay-stubs-main-app</name>
 
 <dependencies>
     <dependency>
-        <groupId>com.guerrer0jaguar.paystubs.entity</groupId>
+        <groupId>com.guerrer0jaguar.paystubs</groupId>
         <artifactId>pay-stubs-entities</artifactId>
         <version>1.0</version>
     </dependency>
     <dependency>
-        <groupId>com.guerrero0jaguar.paystubs.dao</groupId>
+        <groupId>com.guerrer0jaguar.paystubs</groupId>
         <artifactId>pay-stubs-daos</artifactId>
         <version>1.0</version>
     </dependency>
     <dependency>
-        <groupId>com.guerrer0jaguar.paystubs.daosimpl</groupId>
+        <groupId>com.guerrer0jaguar.paystubs</groupId>
         <artifactId>pay-stubs-daos-impl</artifactId>
         <version>1.0</version>
     </dependency>

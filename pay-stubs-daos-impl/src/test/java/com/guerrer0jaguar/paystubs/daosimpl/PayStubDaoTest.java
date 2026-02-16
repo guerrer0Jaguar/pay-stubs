@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
@@ -78,17 +79,16 @@ class PayStubDaoTest {
         
         List<PayStub> itemsFound = dao
                 .findByTimeCreation(
-                        fromShortDateToInstant("2025-02-05"), 
+                        fromShortDateToInstant("2025-02-06"), 
                         fromShortDateToInstant("2025-02-07"), 
                         payStub.getEmployee().getTaxId());
         assertFalse(itemsFound.isEmpty());
         assertTrue(itemsFound.size() == 3);
-        
-        Instant yesterday = Instant.now().minus(1, ChronoUnit.DAYS);
-        Instant today = Instant.now().plus(1, ChronoUnit.DAYS);
+                
+        Instant tomorrow = Instant.now().plus(1, ChronoUnit.DAYS);
         List<PayStub> otherItems = dao.findByTimeCreation(
-                yesterday, 
-                today,
+                Instant.now(), 
+                tomorrow,
                 payStub.getEmployee().getTaxId());
         assertFalse(otherItems.isEmpty());
         assertTrue(otherItems.size() == 1);

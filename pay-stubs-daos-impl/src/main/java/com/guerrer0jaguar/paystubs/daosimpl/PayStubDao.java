@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class PayStubDao extends BaseDao<PayStub> implements Dao<PayStub,Key> {
         DynamoDbIndex<PayStub> idx = table.index("payStubByDate");
         
         String fromStr = formatInstantToShortDate(from);
-        String toStr = formatInstantToShortDate(until);
+        String toStr = formatInstantToShortDate(until.plus(1, ChronoUnit.DAYS));
         
         QueryConditional qry = QueryConditional
                 .sortBetween(
