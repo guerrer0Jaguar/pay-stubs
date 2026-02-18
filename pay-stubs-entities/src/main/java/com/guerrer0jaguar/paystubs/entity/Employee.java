@@ -14,6 +14,7 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbParti
 @EqualsAndHashCode
 public class Employee {
     
+    private static final String SPACE = " ";
     @Getter(onMethod_ = @DynamoDbPartitionKey)
     private String taxId;// RFC
     private String firstName;
@@ -25,5 +26,13 @@ public class Employee {
     
     public Employee(String taxId) {
         this.taxId = taxId;
+    }
+
+    public String getFullName() {
+        StringBuilder sb = new StringBuilder(firstName);
+        sb.append(SPACE);
+        sb.append(lastName);
+        
+        return sb.toString();
     }    
 }

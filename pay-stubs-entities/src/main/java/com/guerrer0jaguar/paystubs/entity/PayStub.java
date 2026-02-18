@@ -1,5 +1,6 @@
 package com.guerrer0jaguar.paystubs.entity;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 import lombok.Data;
@@ -24,4 +25,5 @@ public class PayStub  {
   @Getter(onMethod_ = @DynamoDbFlatten)  
   private Employee employee;
   private String urlFile;
+  private BigDecimal total;
 }
