@@ -9,6 +9,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.Objects;
 
 import org.openpdf.text.Chunk;
 import org.openpdf.text.Document;
@@ -49,16 +50,10 @@ public class PayStubRenderingPDFimpl implements PayStubRendering {
             document.setFooter(footer);
             
             document.open();
-            
-            document.add(Chunk.NEWLINE);             
-            document.add(Chunk.NEWLINE);             
-            document.add(Chunk.NEWLINE);             
+                                    
             Chunk name = new Chunk(payStub.getEmployee().getFullName());                                    
             document.add(name);
             
-            document.add(Chunk.NEWLINE);             
-            document.add(Chunk.NEWLINE);             
-            document.add(Chunk.NEWLINE);
             Chunk total = new Chunk(formatTotal(payStub.getTotal() ));
             Paragraph pTotal = new Paragraph(total);
             pTotal.setAlignment(Element.ALIGN_RIGHT);
@@ -108,6 +103,29 @@ public class PayStubRenderingPDFimpl implements PayStubRendering {
         return formatter.format(total);
     }
 
+    @SuppressWarnings("exports")
+    @Override
+    public boolean isPayStubValid(PayStub payStub) {
+        
+        boolean isValid = PayStubRendering
+                .super
+                .isPayStubValid(payStub);
+        
+        if( !isValid) {
+            return false;
+        }
+        
+        if (Objects.isNull(payStub.getCreationDate()) ) {
+            return false;
+        }
+        
+        if (Objects.isNull(payStub.getTotal())  ) {
+            return false;
+        }
+        
+        return true;
+    }
+    
     private byte[] defaultPDF() throws IOException {
         try (InputStream in = loadFile("test1.pdf")) {
             return in.readAllBytes();
