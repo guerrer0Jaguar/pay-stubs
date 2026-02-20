@@ -16,40 +16,43 @@ abstract class BaseDao<T extends PayStub> {
 
     protected final DynamoDbEnhancedClient dynamoDBClient;
     protected final DynamoDbTable<T> table;
-    
-    BaseDao(Class<T> type) {       
-        this.dynamoDBClient = DbConnection.getInstance().getEnhDbEnhanceDBclient();
 
-        table = dynamoDBClient.table(type.getSimpleName(),
-                TableSchema.fromBean(type));
+    BaseDao(Class<T> type) {
+        this.dynamoDBClient = DbConnection
+                .getInstance()
+                .getEnhDbEnhanceDBclient();
+
+        table = dynamoDBClient
+                .table(type.getSimpleName(), TableSchema.fromBean(type));
     }
-    
+
     public T save(
             T entity) {
-        
-        generateIdentity(entity);       
+
+        generateIdentity(entity);
         table.putItem(entity);
-        
+
         return entity;
     }
-    
+
     public Optional<T> findById(
             Key key) {
-               
-       T entity = table.getItem(k -> k.key(key));
-       
-       return Objects.isNull(entity) ?
-               Optional.empty() :
-               Optional.of(entity);
+
+        T entity = table.getItem(k -> k.key(key));
+
+        return Objects.isNull(entity) ? Optional.empty() : Optional.of(entity);
     }
- 
-    void generateIdentity(T entity){
-     String id = UUID.randomUUID().toString();
-     entity.setId(id);
-     
-     if (entity.getCreationDate() == null) {
-         entity.setCreationDate(Instant.now());
-     }
-                                                    
+
+    void generateIdentity(
+            T entity) {
+
+        if (entity.getId() == null || entity.getId().isBlank()) {
+            String id = UUID.randomUUID().toString();
+            entity.setId(id);
+        }
+
+        if (entity.getCreationDate() == null) {
+            entity.setCreationDate(Instant.now());
+        }
     }
 }

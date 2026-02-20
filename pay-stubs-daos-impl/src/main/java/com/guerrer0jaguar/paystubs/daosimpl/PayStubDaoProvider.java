@@ -6,7 +6,7 @@ import com.guerrer0jaguar.paystubs.entity.PayStub;
 
 import software.amazon.awssdk.enhanced.dynamodb.Key;
 
-public class PayStubDaoProvider implements DaoProviderFactory<PayStub, Key> {
+public class PayStubDaoProvider implements DaoProviderFactory {
 
     @SuppressWarnings("exports")
     @Override

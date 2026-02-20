@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
@@ -87,7 +86,7 @@ class PayStubDaoTest {
                 
         Instant tomorrow = Instant.now().plus(1, ChronoUnit.DAYS);
         List<PayStub> otherItems = dao.findByTimeCreation(
-                Instant.now(), 
+                Instant.now().minus(1, ChronoUnit.DAYS), 
                 tomorrow,
                 payStub.getEmployee().getTaxId());
         assertFalse(otherItems.isEmpty());
@@ -100,9 +99,10 @@ class PayStubDaoTest {
         return ld.atStartOfDay(ZoneOffset.UTC).toInstant();
     }
     
+    @SuppressWarnings("unchecked")
     private Dao<PayStub, Key> createDAO() {
-        DaoProviderFactory<PayStub,Key> factory = new PayStubDaoProvider();
-        Dao<PayStub,Key> dao = factory.createDao();        
+        DaoProviderFactory factory = new PayStubDaoProvider();
+        Dao<PayStub,Key> dao = (Dao<PayStub, Key>) factory.createDao();        
         assertNotNull(dao);
         
         return dao;
