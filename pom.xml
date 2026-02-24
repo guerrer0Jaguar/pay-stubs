@@ -56,6 +56,7 @@
 		<module>pay-stubs-daos</module>
 		<module>pay-stubs-daos-impl</module>
 		<module>pay-stubs-rendering</module>
+		<module>pay-stubs-rendering-impl</module>
 		<module>pay-stubs-main-app</module>
 	</modules>
 	<dependencyManagement>

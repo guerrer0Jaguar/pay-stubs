@@ -13,6 +13,7 @@ import com.guerrer0jaguar.paystubs.dao.Dao;
 import com.guerrer0jaguar.paystubs.dao.DaoProviderFactory;
 import com.guerrer0jaguar.paystubs.entity.PayStub;
 import com.guerrer0jaguar.paystubs.rendering.PayStubRendering;
+import com.guerrer0jaguar.paystubs.rendering.impl.PayStubRenderingPDFimpl;
 
 import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -23,21 +24,21 @@ import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 @Slf4j
 public class PayStubLambdaHandler implements RequestHandler<PayStub, Response> {
-    
-    private final S3Client s3Client;
+
     private final Dao<PayStub, Key> daoService;
     private final PayStubRendering render;
-    
-    public PayStubLambdaHandler() {
+    private final S3Client s3Client;
+
+    public PayStubLambdaHandler() {        
         
-        s3Client = S3Client.builder().build();
         daoService = loadDAOservice();
         render = loadRenderService();
-        
+        s3Client = S3Client.builder().build();
+
         String pdfBucket = System.getenv("PDF_BUCKET");
-        if (Objects.isNull(pdfBucket)
-                || pdfBucket.isBlank()) {
-            throw new IllegalArgumentException("PDF_BUCKET variable is no set!!");
+        if (Objects.isNull(pdfBucket) || pdfBucket.isBlank()) {
+            throw new IllegalArgumentException(
+                    "PDF_BUCKET variable is no set!!");
         }
     }
 
@@ -45,35 +46,34 @@ public class PayStubLambdaHandler implements RequestHandler<PayStub, Response> {
     public Response handleRequest(
             PayStub input,
             Context context) {
-                        
+
         boolean isInputValid = render.isPayStubValid(input);
         String id = UUID.randomUUID().toString();
         input.setId(id);
-        
+
         if (!isInputValid) {
             return new Response("Request invalid!");
         }
-        
+
         try {
-            byte [] pdf = render.generatePayStubRepresentation(input);                        
+            byte[] pdf = render.generatePayStubRepresentation(input);
             final String publicUrl = saveFileInS3Bucket(input, pdf);
             input.setUrlFile(publicUrl);
-        } catch (IOException e) {            
+        } catch (IOException e) {
             String msg = "Error at creating PDF...";
             log.error(msg, e);
             return new Response(msg);
         }
-        
-                 
+
         daoService.save(input);
-        
+
         return new Response("Request received processin...");
     }
 
     private String saveFileInS3Bucket(
             PayStub input,
             byte[] fileBytes) {
-        
+
         InputStream pdfInputStream = new ByteArrayInputStream(fileBytes);
         String fileName = input.getId();
         PutObjectRequest putObjectRequest = PutObjectRequest
@@ -81,37 +81,37 @@ public class PayStubLambdaHandler implements RequestHandler<PayStub, Response> {
                 .bucket(getBucketToSavePDF())
                 .key(fileName)
                 .build();
-        
-        RequestBody requestBody = RequestBody.fromInputStream(pdfInputStream, fileBytes.length);
-        PutObjectResponse resp =
-        s3Client.putObject(putObjectRequest, 
-                requestBody);
+
+        RequestBody requestBody = RequestBody
+                .fromInputStream(pdfInputStream, fileBytes.length);
+        PutObjectResponse resp = s3Client
+                .putObject(putObjectRequest, requestBody);
         log.info("Image saved in S3 bucket: {}", resp);
 
-        final String publicUrl = String.format("https://%s.s3.%s.amazonaws.com/%s", 
-                        getBucketToSavePDF(),
-                        System.getenv("AWS_REGION"), 
+        final String publicUrl = String
+                .format("https://%s.s3.%s.amazonaws.com/%s",
+                        getBucketToSavePDF(), System.getenv("AWS_REGION"),
                         fileName);
-        
+
         return publicUrl;
-    }
-
-
-    private PayStubRendering loadRenderService() {
-        Iterable<PayStubRendering> services = ServiceLoader.load(PayStubRendering.class);
-        return services.iterator().next();
-    }
-    
-    String getBucketToSavePDF() {
-        return System.getenv("PDF_BUCKET");        
     }
     
     @SuppressWarnings("unchecked")
     private Dao<PayStub, Key> loadDAOservice() {
-        Iterable<DaoProviderFactory> services = ServiceLoader.load(DaoProviderFactory.class);
+        Iterable<DaoProviderFactory> services = ServiceLoader
+                .load(DaoProviderFactory.class);
         DaoProviderFactory factory = services.iterator().next();
-        
+
         return (Dao<PayStub, Key>) factory.createDao();
     }
+    
+    private PayStubRendering loadRenderService() {
+        return new PayStubRenderingPDFimpl();        
+    }
+
+    String getBucketToSavePDF() {
+        return System.getenv("PDF_BUCKET");
+    }
+
 
 }

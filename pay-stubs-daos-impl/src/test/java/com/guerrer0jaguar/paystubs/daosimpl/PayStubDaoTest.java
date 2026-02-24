@@ -33,6 +33,7 @@ class PayStubDaoTest {
 
         Dao<PayStub,Key> dao = createDAO();
         PayStub payStub = createPayStubEntity("https://test.com/file1.pdf");
+        payStub.setCreationDate(Instant.parse("2025-01-06T10:15:30.00Z"));
         payStub =  dao.save(payStub);
         assertNotNull(payStub.getId());
         assertNotNull(payStub.getCreationDate());
@@ -42,6 +43,7 @@ class PayStubDaoTest {
     void testFindById() {
         Dao<PayStub,Key> dao = createDAO();
         PayStub payStub = createPayStubEntity("https://test.com/file2.pdf");
+        payStub.setCreationDate(Instant.parse("2025-01-07T10:15:30.00Z"));
         payStub = dao.save(payStub);        
         
         Key key = Key
@@ -55,7 +57,8 @@ class PayStubDaoTest {
     }
     
     @Test
-    void testByCreationDate() {
+    void testByCreationDate() throws InterruptedException {
+        log.info("Runnig testByCreationDate at {}", Instant.now());
         Dao<PayStub,Key> dao = createDAO();
         List<PayStub> toSave = new ArrayList<>();
         
@@ -73,8 +76,12 @@ class PayStubDaoTest {
         
         PayStub payStub4 = createPayStubEntity("url4");
         toSave.add(payStub4);
-        
-        toSave.stream().forEach(dao::save);
+               
+        List<PayStub> payStubsSaved = new ArrayList<>();
+        toSave.stream().forEach(ps -> {
+            var saved = dao.save(ps);
+            payStubsSaved.add(saved);
+        });
         
         List<PayStub> itemsFound = dao
                 .findByTimeCreation(
@@ -83,13 +90,16 @@ class PayStubDaoTest {
                         payStub.getEmployee().getTaxId());
         assertFalse(itemsFound.isEmpty());
         assertTrue(itemsFound.size() == 3);
-                
+        
         Instant tomorrow = Instant.now().plus(1, ChronoUnit.DAYS);
         List<PayStub> otherItems = dao.findByTimeCreation(
                 Instant.now().minus(1, ChronoUnit.DAYS), 
                 tomorrow,
                 payStub.getEmployee().getTaxId());
         assertFalse(otherItems.isEmpty());
+        if ( otherItems.size() > 1) {
+            log.warn("Too many elements in search by date(today) {}", otherItems.size());
+        }
         assertTrue(otherItems.size() == 1);
         log.info("Last element created at {}", otherItems.getFirst().getCreationDate());
     }

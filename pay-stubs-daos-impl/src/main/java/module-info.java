@@ -4,7 +4,7 @@ module com.guerrer0jaguar.paystubs.daosimpl {
     requires com.guerrer0jaguar.paystubs.entity;
     requires com.guerrer0jaguar.paystubs.dao;
 
-    requires software.amazon.awssdk.regions;
+    requires transitive software.amazon.awssdk.regions;
     requires transitive software.amazon.awssdk.utils;
     requires transitive software.amazon.awssdk.awscore;
     requires transitive software.amazon.awssdk.core;

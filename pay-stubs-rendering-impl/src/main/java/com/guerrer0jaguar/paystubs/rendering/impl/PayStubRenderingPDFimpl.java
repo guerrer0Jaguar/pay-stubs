@@ -26,7 +26,6 @@ import com.guerrer0jaguar.paystubs.rendering.PayStubRendering;
 
 public class PayStubRenderingPDFimpl implements PayStubRendering {
 
-    @SuppressWarnings("exports")
     @Override
     public byte[] generatePayStubRepresentation(
             PayStub payStub) throws IOException {
@@ -103,7 +102,6 @@ public class PayStubRenderingPDFimpl implements PayStubRendering {
         return formatter.format(total);
     }
 
-    @SuppressWarnings("exports")
     @Override
     public boolean isPayStubValid(PayStub payStub) {
         

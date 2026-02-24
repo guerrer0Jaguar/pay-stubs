@@ -1,9 +1,8 @@
 module com.guerrer0jaguar.paystubs.rendering.impl {
        
-    requires com.guerrer0jaguar.paystubs.entity;
-    requires com.guerrer0jaguar.paystubs.rendering;
-    requires com.github.librepdf.openpdf;
-    requires java.desktop;
+    requires transitive com.guerrer0jaguar.paystubs.entity;
+    requires transitive com.guerrer0jaguar.paystubs.rendering;
+    requires transitive com.github.librepdf.openpdf;    
     
     provides com.guerrer0jaguar.paystubs.rendering.PayStubRendering 
         with com.guerrer0jaguar.paystubs.rendering.impl.PayStubRenderingPDFimpl;
