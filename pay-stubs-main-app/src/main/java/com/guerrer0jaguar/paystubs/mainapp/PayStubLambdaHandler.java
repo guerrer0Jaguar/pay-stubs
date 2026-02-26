@@ -30,6 +30,7 @@ public class PayStubLambdaHandler implements RequestHandler<PayStub, Response> {
     private final S3Client s3Client;
 
     public PayStubLambdaHandler() {        
+        listModules();
         
         daoService = loadDAOservice();
         render = loadRenderService();
@@ -40,6 +41,14 @@ public class PayStubLambdaHandler implements RequestHandler<PayStub, Response> {
             throw new IllegalArgumentException(
                     "PDF_BUCKET variable is no set!!");
         }
+    }
+
+    private void listModules() {
+        System.out.println("Modules list available...");
+        ModuleLayer.boot().modules().stream()
+        .map(Module::getName)
+        .forEach(System.out::println);
+        System.out.println("end of modules list");
     }
 
     @Override
