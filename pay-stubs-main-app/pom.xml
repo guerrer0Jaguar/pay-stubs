@@ -50,6 +50,22 @@
 			<artifactId>s3</artifactId>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-lambda-java-events</artifactId>
+			<version>3.11.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-lambda-java-log4j2</artifactId>
+			<version>1.5.1</version>
+		</dependency>		
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-layout-template-json</artifactId>
+			<version>2.25.3</version>
+			<scope>runtime</scope>
+		</dependency>
 
 	</dependencies>
 	<build>
@@ -61,10 +77,9 @@
 					<descriptors>
 						<descriptor>src/main/assembly/assembly.xml</descriptor>
 					</descriptors>
-					<finalName>pay-stubs</finalName>>
-				</configuration>
+					<finalName>
+					pay-stubs</finalName>> </configuration>
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

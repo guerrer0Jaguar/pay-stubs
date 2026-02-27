@@ -4,13 +4,13 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
-import java.util.ServiceLoader;
 import java.util.UUID;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.guerrer0jaguar.paystubs.dao.Dao;
 import com.guerrer0jaguar.paystubs.dao.DaoProviderFactory;
+import com.guerrer0jaguar.paystubs.daosimpl.PayStubDaoProvider;
 import com.guerrer0jaguar.paystubs.entity.PayStub;
 import com.guerrer0jaguar.paystubs.rendering.PayStubRendering;
 import com.guerrer0jaguar.paystubs.rendering.impl.PayStubRenderingPDFimpl;
@@ -30,8 +30,7 @@ public class PayStubLambdaHandler implements RequestHandler<PayStub, Response> {
     private final S3Client s3Client;
 
     public PayStubLambdaHandler() {        
-        listModules();
-        
+            
         daoService = loadDAOservice();
         render = loadRenderService();
         s3Client = S3Client.builder().build();
@@ -41,14 +40,6 @@ public class PayStubLambdaHandler implements RequestHandler<PayStub, Response> {
             throw new IllegalArgumentException(
                     "PDF_BUCKET variable is no set!!");
         }
-    }
-
-    private void listModules() {
-        System.out.println("Modules list available...");
-        ModuleLayer.boot().modules().stream()
-        .map(Module::getName)
-        .forEach(System.out::println);
-        System.out.println("end of modules list");
     }
 
     @Override
@@ -61,7 +52,8 @@ public class PayStubLambdaHandler implements RequestHandler<PayStub, Response> {
         input.setId(id);
 
         if (!isInputValid) {
-            return new Response("Request invalid!");
+            log.info("input received: {}" , input);
+            return new Response("Request invalid!","");
         }
 
         try {
@@ -71,12 +63,13 @@ public class PayStubLambdaHandler implements RequestHandler<PayStub, Response> {
         } catch (IOException e) {
             String msg = "Error at creating PDF...";
             log.error(msg, e);
-            return new Response(msg);
+            return new Response("Request invalid!!", "");
         }
 
-        daoService.save(input);
-
-        return new Response("Request received processin...");
+        PayStub newPayStub = daoService.save(input);
+        log.info("New pay stub saved successfully!");
+        
+        return new Response(newPayStub.getId(), newPayStub.getUrlFile());
     }
 
     private String saveFileInS3Bucket(
@@ -107,10 +100,8 @@ public class PayStubLambdaHandler implements RequestHandler<PayStub, Response> {
     
     @SuppressWarnings("unchecked")
     private Dao<PayStub, Key> loadDAOservice() {
-        Iterable<DaoProviderFactory> services = ServiceLoader
-                .load(DaoProviderFactory.class);
-        DaoProviderFactory factory = services.iterator().next();
-
+        
+        DaoProviderFactory factory = new PayStubDaoProvider();        
         return (Dao<PayStub, Key>) factory.createDao();
     }
     
