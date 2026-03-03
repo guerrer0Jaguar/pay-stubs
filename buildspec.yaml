@@ -1,0 +1,23 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      java: corretto25
+  pre_build:
+    commands:
+    - echo In the pre_build phase...
+  build:
+    commands:
+    - echo Build started on `date`
+  post_build:
+    commands:
+    - echo Build completed on `date`
+    - cd pay-stubs-main-app 
+    - mvn clean install
+    - mvn assembly:single
+    - mv target/pay-stubs-main-app-1.0.jar pay-stubs-main-app-1.0.jar
+    - mv target/pay-stubs-aws-layer.zip pay-stubs-aws-layer.zip
+artifacts:
+  files:
+  - pay-stubs-main-app-1.0.jar
+  - pay-stubs-aws-layer.zip
