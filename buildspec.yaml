@@ -12,6 +12,7 @@ phases:
   post_build:
     commands:
     - echo Build completed on `date`
+    - mvn clean install
     - cd pay-stubs-main-app 
     - mvn clean install
     - mvn assembly:single
