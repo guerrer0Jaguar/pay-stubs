@@ -13,11 +13,11 @@ phases:
     commands:
     - echo Build completed on `date`
     - mvn clean install
-    - cd pay-stubs-main-app     
-    - mvn assembly:single -DskipTests
-    - mv target/pay-stubs-main-app-1.0.jar ../pay-stubs-main-app-1.0.jar
-    #- mv target/pay-stubs-aws-layer.zip ../pay-stubs-aws-layer.zip
+    - cd pay-stubs-main-app         
+	- mkdir -p lib
+    - mv target/pay-stubs-main-app-1.0.jar lib/ 
+	- zip -r pay-stub-package.zip lib
+    - mv pay-stub-package.zip ../pay-stub-package.zip
 artifacts:
   files:
-  - pay-stubs-main-app-1.0.jar
-  #- pay-stubs-aws-layer.zip
+  - pay-stub-package.zip
