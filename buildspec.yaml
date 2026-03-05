@@ -16,8 +16,8 @@ phases:
     - cd pay-stubs-main-app     
     - mvn assembly:single -DskipTests
     - mv target/pay-stubs-main-app-1.0.jar ../pay-stubs-main-app-1.0.jar
-    - mv target/pay-stubs-aws-layer.zip ../pay-stubs-aws-layer.zip
+    #- mv target/pay-stubs-aws-layer.zip ../pay-stubs-aws-layer.zip
 artifacts:
   files:
   - pay-stubs-main-app-1.0.jar
-  - pay-stubs-aws-layer.zip
+  #- pay-stubs-aws-layer.zip
