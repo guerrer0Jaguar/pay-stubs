@@ -14,6 +14,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.junitpioneer.jupiter.SetEnvironmentVariable;
 
 import com.guerrer0jaguar.paystubs.dao.Dao;
 import com.guerrer0jaguar.paystubs.dao.DaoProviderFactory;
@@ -24,11 +25,12 @@ import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
 
 @Slf4j
+@SetEnvironmentVariable(key = "AWS_ENDPOINT_URL_DYNAMODB", value = "http://localhost:8000")
 class PayStubDaoTest {
     @RegisterExtension
     static LocalDbCreationExtension localDB = new LocalDbCreationExtension();
 
-    @Test
+    @Test    
     void testSave() {
 
         Dao<PayStub,Key> dao = createDAO();
