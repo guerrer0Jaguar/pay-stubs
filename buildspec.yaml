@@ -17,5 +17,4 @@ phases:
     - mv pay-stubs-main-app/target/pay-stubs-main-app-1.0.jar lib/
 artifacts:
   files:
-    - "**/*"
-    base-directory: lib
+  - "lib/**/*"
